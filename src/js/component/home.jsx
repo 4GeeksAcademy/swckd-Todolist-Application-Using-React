@@ -8,15 +8,8 @@ const Home = () => {
 
 	const [todoList, setTodoList] = useState([]);
 
-	//https://dev.to/collegewap/how-to-delete-an-item-from-the-state-array-in-react-kl
-	const deleteByIndex = (index) => {
-		setTodoList(todoList => {
-			return todoList.filter((_, i) => i !== index)
-		})
-	}
-
 	return (
-		<div className="text-center">
+		<div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto">
 			<h1 className="text-center mt-5">lista de tareas</h1>
 			<ul className="list-group list-group-flush">
 				<li className="list-group-item">
@@ -25,7 +18,7 @@ const Home = () => {
 						onChange={(e) => setInputValue(e.target.value)}
 						onKeyDown={(e) => {
 							if (e.key === "Enter") {
-								setTodoList(todoList => [...todoList, inputValue]);
+								setTodoList(todoList.concat(inputValue));
 								setInputValue("");
 							}
 						}
@@ -33,21 +26,29 @@ const Home = () => {
 					/>
 				</li>
 
-				{todoList.length === 0 ? <li className="list-group-item">Añade una tarea</li> :
+				{todoList.length === 0 ?
+					<li className="list-group-item">No hay tareas pendientes</li> :
 					todoList.map((tarea, index) => {
-						return <li className="list-group-item" key={index}>{tarea}
+						return <li className="list-group-item text-start" key={index}>
 							<span
-								className="ms-2 badge text-bg-secondary"
-								// onClick={() => delete todoList[index]}
-								onClick={() => deleteByIndex(index)}
+								className="me-2 badge text-bg-secondary"
+
+								onClick={() => setTodoList(
+									todoList.filter(
+										(todo, currentTodoIndex) => index != currentTodoIndex
+									)
+								)}
 							>X</span>
+							{tarea}
 						</li>;
 					})
+
 				}
+				{todoList.length > 0 ? <li className="list-group-item">c{todoList.length} tareas pendientes</li> : ""}
 
 
 			</ul>
-		</div>
+		</div >
 	);
 };
 
